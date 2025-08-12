@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spotifydb
+    username: spotify
+    password: spotify
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+app:
+  jwt:
+    secret: "replace-with-very-secure-random-secret-change-me"
+    access-expiration-minutes: 60
+    refresh-expiration-days: 30
+server:
+  port: 8080
