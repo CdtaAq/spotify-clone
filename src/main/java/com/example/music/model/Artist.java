@@ -16,25 +16,24 @@ public class Artist {
     private String name;
 
     @Column(length = 2000)
-    private String bio;
+    private String biography;
 
-    @Column(name = "popularity_score")
-    private int popularityScore; // lower = less popular
+    // Popularity score (0 = obscure, higher = popular)
+    private int popularityScore;
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Album> albums = new ArrayList<>();
 
-    // ===== Constructors =====
-    public Artist() {
-    }
+    // === Constructors ===
+    public Artist() {}
 
-    public Artist(String name, String bio, int popularityScore) {
+    public Artist(String name, String biography, int popularityScore) {
         this.name = name;
-        this.bio = bio;
+        this.biography = biography;
         this.popularityScore = popularityScore;
     }
 
-    // ===== Getters and Setters =====
+    // === Getters and Setters ===
     public Long getId() {
         return id;
     }
@@ -51,12 +50,12 @@ public class Artist {
         this.name = name;
     }
 
-    public String getBio() {
-        return bio;
+    public String getBiography() {
+        return biography;
     }
 
-    public void setBio(String bio) {
-        this.bio = bio;
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 
     public int getPopularityScore() {
@@ -75,11 +74,13 @@ public class Artist {
         this.albums = albums;
     }
 
+    // Helper method to add album
     public void addAlbum(Album album) {
         albums.add(album);
         album.setArtist(this);
     }
 
+    // Helper method to remove album
     public void removeAlbum(Album album) {
         albums.remove(album);
         album.setArtist(null);
