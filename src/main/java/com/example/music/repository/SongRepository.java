@@ -8,6 +8,9 @@ import java.util.List;
 
 @Repository
 public interface SongRepository extends JpaRepository<Song, Long> {
-    Song findByTitle(String title);
+    // Find songs less popular than a given score
     List<Song> findByPopularityScoreLessThan(int popularityScore);
+
+    // Lookup by title
+    Song findByTitle(String title);
 }
