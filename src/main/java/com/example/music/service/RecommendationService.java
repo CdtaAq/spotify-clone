@@ -1,11 +1,13 @@
-// src/main/java/com/example/music/service/RecommendationService.java
 package com.example.music.service;
 
 import com.example.music.model.Artist;
 import com.example.music.repository.ArtistRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RecommendationService {
@@ -16,21 +18,25 @@ public class RecommendationService {
         this.artistRepository = artistRepository;
     }
 
-    public List<Artist> recommendObscureArtists(Artist currentArtist) {
-        if (currentArtist.getGenres().isEmpty()) {
-            return List.of(); // no genres, can’t recommend
+    /**
+     * Recommend obscure artists based on the artist being listened to.
+     * It finds artists with lower popularity score compared to the given artist.
+     */
+    public List<Artist> recommendObscureArtists(String currentArtistName) {
+        // Lookup current artist
+        Artist current = artistRepository.findByName(currentArtistName);
+        if (current == null) {
+            throw new RuntimeException("Artist not found: " + currentArtistName);
         }
-        List<Long> genreIds = currentArtist.getGenres()
-                .stream()
-                .map(g -> g.getId())
-                .toList();
 
-        List<Artist> candidates = artistRepository.findObscureArtistsByGenre(genreIds);
+        // Get obscure artists (lower popularity score)
+        List<Artist> obscureArtists = artistRepository
+                .findByPopularityScoreLessThan(current.getPopularityScore());
 
-        // filter out the current artist itself
-        return candidates.stream()
-                .filter(a -> !a.getId().equals(currentArtist.getId()))
-                .limit(5) // top 5 obscure recommendations
-                .toList();
+        // Sort by lowest popularity first (truly obscure)
+        return obscureArtists.stream()
+                .sorted(Comparator.comparingInt(Artist::getPopularityScore))
+                .limit(5) // return top 5 obscure suggestions
+                .collect(Collectors.toList());
     }
 }
