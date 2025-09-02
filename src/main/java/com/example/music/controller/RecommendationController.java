@@ -1,8 +1,6 @@
-// src/main/java/com/example/music/controller/RecommendationController.java
 package com.example.music.controller;
 
 import com.example.music.model.Artist;
-import com.example.music.repository.ArtistRepository;
 import com.example.music.service.RecommendationService;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,19 +11,14 @@ import java.util.List;
 public class RecommendationController {
 
     private final RecommendationService recommendationService;
-    private final ArtistRepository artistRepository;
 
-    public RecommendationController(RecommendationService recommendationService,
-                                    ArtistRepository artistRepository) {
+    public RecommendationController(RecommendationService recommendationService) {
         this.recommendationService = recommendationService;
-        this.artistRepository = artistRepository;
     }
 
-    @GetMapping("/obscure/{artistId}")
-    public List<Artist> recommendObscure(@PathVariable Long artistId) {
-        Artist current = artistRepository.findById(artistId)
-                .orElseThrow(() -> new RuntimeException("Artist not found"));
-
-        return recommendationService.recommendObscureArtists(current);
+    // Example: GET /api/recommendations/artist?name=Drake
+    @GetMapping("/artist")
+    public List<Artist> recommendObscureArtists(@RequestParam String name) {
+        return recommendationService.recommendObscureArtists(name);
     }
 }
