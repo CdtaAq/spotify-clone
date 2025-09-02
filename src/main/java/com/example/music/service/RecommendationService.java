@@ -1,11 +1,11 @@
 package com.example.music.service;
 
-import com.example.music.model.Album;
 import com.example.music.model.Artist;
 import com.example.music.model.Song;
-import com.example.music.repository.AlbumRepository;
+import com.example.music.model.Album;
 import com.example.music.repository.ArtistRepository;
 import com.example.music.repository.SongRepository;
+import com.example.music.repository.AlbumRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -19,15 +19,16 @@ public class RecommendationService {
     private final SongRepository songRepository;
     private final AlbumRepository albumRepository;
 
-    public RecommendationService(ArtistRepository artistRepository,
-                                 SongRepository songRepository,
-                                 AlbumRepository albumRepository) {
+    public RecommendationService(
+            ArtistRepository artistRepository,
+            SongRepository songRepository,
+            AlbumRepository albumRepository) {
         this.artistRepository = artistRepository;
         this.songRepository = songRepository;
         this.albumRepository = albumRepository;
     }
 
-    // 🔹 Recommend obscure artists
+    /** Recommend obscure artists */
     public List<Artist> recommendObscureArtists(String currentArtistName) {
         Artist current = artistRepository.findByName(currentArtistName);
         if (current == null) throw new RuntimeException("Artist not found: " + currentArtistName);
@@ -39,7 +40,7 @@ public class RecommendationService {
                 .collect(Collectors.toList());
     }
 
-    // 🔹 Recommend obscure songs
+    /** Recommend obscure songs */
     public List<Song> recommendObscureSongs(String currentSongTitle) {
         Song current = songRepository.findByTitle(currentSongTitle);
         if (current == null) throw new RuntimeException("Song not found: " + currentSongTitle);
@@ -51,7 +52,7 @@ public class RecommendationService {
                 .collect(Collectors.toList());
     }
 
-    // 🔹 Recommend obscure albums
+    /** Recommend obscure albums */
     public List<Album> recommendObscureAlbums(String currentAlbumTitle) {
         Album current = albumRepository.findByTitle(currentAlbumTitle);
         if (current == null) throw new RuntimeException("Album not found: " + currentAlbumTitle);
