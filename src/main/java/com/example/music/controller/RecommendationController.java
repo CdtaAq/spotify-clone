@@ -1,6 +1,8 @@
 package com.example.music.controller;
 
+import com.example.music.model.Album;
 import com.example.music.model.Artist;
+import com.example.music.model.Song;
 import com.example.music.service.RecommendationService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,21 @@ public class RecommendationController {
         this.recommendationService = recommendationService;
     }
 
-    // Example: GET /api/recommendations/artist?name=Drake
+    //  GET /api/recommendations/artist?name=Drake
     @GetMapping("/artist")
     public List<Artist> recommendObscureArtists(@RequestParam String name) {
         return recommendationService.recommendObscureArtists(name);
+    }
+
+    //  GET /api/recommendations/song?title=God's Plan
+    @GetMapping("/song")
+    public List<Song> recommendObscureSongs(@RequestParam String title) {
+        return recommendationService.recommendObscureSongs(title);
+    }
+
+    //  GET /api/recommendations/album?title=Scorpion
+    @GetMapping("/album")
+    public List<Album> recommendObscureAlbums(@RequestParam String title) {
+        return recommendationService.recommendObscureAlbums(title);
     }
 }
