@@ -16,32 +16,23 @@ public class PlaylistController {
         this.playlistService = playlistService;
     }
 
-    @PostMapping("/create")
-    public Playlist createPlaylist(
-            @RequestParam Long userId,
-            @RequestParam String name,
-            @RequestParam(required = false) String description
-    ) {
-        return playlistService.createPlaylist(userId, name, description);
+    @PostMapping("/{userId}")
+    public Playlist createPlaylist(@PathVariable Long userId, @RequestParam String title) {
+        return playlistService.createPlaylist(userId, title);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     public List<Playlist> getUserPlaylists(@PathVariable Long userId) {
         return playlistService.getUserPlaylists(userId);
     }
 
-    @PostMapping("/{playlistId}/add-song")
-    public Playlist addSong(@PathVariable Long playlistId, @RequestParam Long songId) {
+    @PostMapping("/{playlistId}/addSong/{songId}")
+    public Playlist addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
         return playlistService.addSongToPlaylist(playlistId, songId);
     }
 
-    @PostMapping("/{playlistId}/remove-song")
-    public Playlist removeSong(@PathVariable Long playlistId, @RequestParam Long songId) {
+    @DeleteMapping("/{playlistId}/removeSong/{songId}")
+    public Playlist removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
         return playlistService.removeSongFromPlaylist(playlistId, songId);
-    }
-
-    @DeleteMapping("/{playlistId}")
-    public void deletePlaylist(@PathVariable Long playlistId) {
-        playlistService.deletePlaylist(playlistId);
     }
 }
