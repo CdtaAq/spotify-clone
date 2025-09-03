@@ -1,9 +1,8 @@
 package com.example.music.model;
 
 import jakarta.persistence.*;
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "playlists")
@@ -13,10 +12,7 @@ public class Playlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-
-    private Instant createdAt = Instant.now();
+    private String title;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,24 +24,30 @@ public class Playlist {
             joinColumns = @JoinColumn(name = "playlist_id"),
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
-    private Set<Song> songs = new HashSet<>();
+    private List<Song> songs = new ArrayList<>();
 
-    // Getters and setters
+    // === Constructors ===
+    public Playlist() {}
+
+    public Playlist(String title, User owner) {
+        this.title = title;
+        this.owner = owner;
+    }
+
+    // === Getters and Setters ===
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public Instant getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
     public User getOwner() { return owner; }
     public void setOwner(User owner) { this.owner = owner; }
 
-    public Set<Song> getSongs() { return songs; }
-    public void setSongs(Set<Song> songs) { this.songs = songs; }
+    public List<Song> getSongs() { return songs; }
+    public void setSongs(List<Song> songs) { this.songs = songs; }
+
+    // Helpers
+    public void addSong(Song song) { songs.add(song); }
+    public void removeSong(Song song) { songs.remove(song); }
 }
