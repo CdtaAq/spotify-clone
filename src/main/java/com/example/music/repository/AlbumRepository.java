@@ -8,9 +8,10 @@ import java.util.List;
 
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long> {
-    // Find albums less popular than a given score
-    List<Album> findByPopularityScoreLessThan(int popularityScore);
 
-    // Lookup by title
-    Album findByTitle(String title);
+    // Search by album title (case-insensitive, partial match)
+    List<Album> findByTitleContainingIgnoreCase(String title);
+
+    // Optional: Filter albums by release year
+    List<Album> findByReleaseYear(int year);
 }
