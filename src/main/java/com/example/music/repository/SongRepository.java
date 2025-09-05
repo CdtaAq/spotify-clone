@@ -8,9 +8,19 @@ import java.util.List;
 
 @Repository
 public interface SongRepository extends JpaRepository<Song, Long> {
-    // Find songs less popular than a given score
-    List<Song> findByPopularityScoreLessThan(int popularityScore);
 
-    // Lookup by title
-    Song findByTitle(String title);
+    // Search by song title (case-insensitive, partial match)
+    List<Song> findByTitleContainingIgnoreCase(String title);
+
+    // Top 10 most played songs (Trending)
+    List<Song> findTop10ByOrderByPlayCountDesc();
+
+    // Top 10 least played songs (Obscure)
+    List<Song> findTop10ByOrderByPlayCountAsc();
+
+    // Optional: Filter by genre
+    List<Song> findByGenreContainingIgnoreCase(String genre);
+
+    // Optional: Filter by release year
+    List<Song> findByReleaseYear(int year);
 }
